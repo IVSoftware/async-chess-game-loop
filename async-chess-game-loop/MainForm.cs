@@ -55,16 +55,24 @@ namespace async_chess_game_loop
 
             while(!_checkmate)
             {
-                if(StateOfPlay.Equals(StateOfPlay.OpponentTurn))
+                switch (StateOfPlay)
                 {
-                    await opponentMove();
-                }
-                else
-                {
-                    await _semaphoreClick.WaitAsync();
+                    case StateOfPlay.PlayerChooseFrom:
+                        await _semaphoreClick.WaitAsync();
+                        StateOfPlay = StateOfPlay.PlayerChooseTo;
+                        break;
+                    case StateOfPlay.PlayerChooseTo:
+                        await _semaphoreClick.WaitAsync();
+                        StateOfPlay = StateOfPlay.OpponentTurn;
+                        break;
+                    case StateOfPlay.OpponentTurn:
+                        await opponentMove();
+                        StateOfPlay = StateOfPlay.PlayerChooseFrom;
+                        break;
                 }
             }
         }
+
         StateOfPlay _stateOfPlay = (StateOfPlay)(-1);
         StateOfPlay StateOfPlay
         {
@@ -108,14 +116,12 @@ namespace async_chess_game_loop
                     case StateOfPlay.PlayerChooseFrom:
                         _playerFrom = square;
                         Text = $"Player {_playerFrom.Notation} : _";
-                        StateOfPlay = StateOfPlay.PlayerChooseTo;
                         break;
                     case StateOfPlay.PlayerChooseTo:
                         _playerTo = square;
                         Text = $"Player {_playerFrom.Notation} : {_playerTo.Notation}";
                         richTextBox.SelectionColor = Color.DarkGreen;
                         richTextBox.AppendText($"{_playerFrom.Notation} : {_playerTo.Notation}{Environment.NewLine}");
-                        StateOfPlay = StateOfPlay.OpponentTurn;
                         break;
                 }
                 _semaphoreClick.Release();
@@ -135,7 +141,6 @@ namespace async_chess_game_loop
             Text = $"Opponent Moved {opponentMove}";
             richTextBox.SelectionColor = Color.DarkBlue;
             richTextBox.AppendText($"{opponentMove}{Environment.NewLine}");
-            StateOfPlay = StateOfPlay.PlayerChooseFrom;
         }
 
 
