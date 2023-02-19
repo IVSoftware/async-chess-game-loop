@@ -86,13 +86,13 @@ This method adds a new `Square`.
     }
 
 
+[![game board][1]][1] 
+
+
+***
 **Game Loop**
 
 The goal is to run a loop that cycles these three states continuously, waiting at each step. However, the main Form is always running it's own Message Loop to detect mouse clicks and key presses and it's important not to block that loop with our own.
-
-[![screenshot][1]][1] 
-
-***
 The `await` keyword causes a method to return _immediately_ which allows the UI loop to keep running. But when "something happens" that we're waiting for, the execution of this method will _resume_ on the next line after the `await`. A [semaphore](https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim) object says when to stop or go and is initialized here in the waiting state.
 
     SemaphoreSlim _semaphoreClick= new SemaphoreSlim(0, 1); 
