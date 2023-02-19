@@ -10,7 +10,7 @@ Your post states that you want to **wait for another method to be triggered befo
 ***
 **Game Board**
 
-But before we start a game _loop_ we need a game _board_ so use `TableLayoutPanel` do do that.
+The goal is to run a loop that cycles these three states continuously, waiting at each step. But before we start a game _loop_ we need a game _board_ so use `TableLayoutPanel` do do that.
 
     enum PlayerColor
     {
@@ -92,8 +92,7 @@ This method adds a new `Square`.
 ***
 **Game Loop**
 
-The goal is to run a loop that cycles these three states continuously, waiting at each step. However, the main Form is always running it's own Message Loop to detect mouse clicks and key presses and it's important not to block that loop with our own.
-The `await` keyword causes a method to return _immediately_ which allows the UI loop to keep running. But when "something happens" that we're waiting for, the execution of this method will _resume_ on the next line after the `await`. A [semaphore](https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim) object says when to stop or go and is initialized here in the waiting state.
+We know we want to cycle the game states in a loop, but the main Form is _also_ running a loop of its own to detect mouse clicks and key presses and it's important not to block that loop with our own. This requires the use of the `await` keyword which causes a waiting method to return _immediately_, allowing the UI loop to keep running. But the `await` acts as a bookmark so that the method can resume on the following line when "something happens" that we're waiting for. A [semaphore](https://learn.microsoft.com/en-us/dotnet/api/system.threading.semaphoreslim) object says when to stop or go and is initialized here in the waiting state.
 
     SemaphoreSlim _semaphoreClick= new SemaphoreSlim(0, 1); 
 
