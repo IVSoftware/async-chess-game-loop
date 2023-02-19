@@ -8,6 +8,83 @@ Your post states that you want to **wait for another method to be triggered befo
     }
 
 ***
+**Game Board**
+But before we start a game _loop_ we need a game _board_ so use `TableLayoutPanel` do do that.
+
+    enum PlayerColor
+    {
+        White,
+        Black,
+    }
+    enum StateOfPlay
+    {
+        PlayerChooseFrom,
+        PlayerChooseTo,
+        OpponentTurn,
+    }
+    public partial class MainForm : Form
+    {
+        public MainForm() => InitializeComponent();
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            // Fix rounding.
+            tableLayoutPanel.Size = new Size(507, 507);
+            for (int column = 0; column < 8; column++)
+                for (int row = 0; row < 8; row++)
+                    addSquare(row, column);
+            // Random draw
+            PlayerColor playerColor =  (PlayerColor)_rando.Next(2);
+            Text = $"Player is {playerColor}";
+            _ = playGameAsync(playerColor);
+        }
+    
+This method adds a new `Square`.
+
+    private void addSquare(int column, int row)
+    {
+        var color = ((column + row) % 2) == 0 ? Color.White : Color.Black;
+        var square = new Square
+        {
+            BackColor = color,
+            Column = column,
+            Row = row,
+            Size = new Size(80, 80),
+            Margin = new Padding(0),
+            Padding = new Padding(10),
+            Anchor = (AnchorStyles)0xf,
+            SizeMode = PictureBoxSizeMode.StretchImage,
+        };
+        tableLayoutPanel.Controls.Add(square, column, row);
+        // Hook the mouse events here
+        square.Click += onSquareClicked;
+    }
+
+    A `Square` is derived from `PictureBox` so that images of pieces can be displayed.
+
+    class Square : PictureBox 
+    {
+        public int Column { get; internal set; }
+        public int Row { get; internal set; }
+        public string Notation => $"{(char)(Column + 'a')}{8 - Row}";
+        public override string ToString() =>
+            Piece == Piece ?
+                $"Empty {BackColor.Name} square [column:{Column} row:{Row}]" :
+                $"{Piece} piece [column:{Column} row:{Row}]";
+        public Piece Piece { get; set; }
+    }
+    enum Player { Black, White };
+    enum PieceType { Pawn, Rook, Knight, Bishop, Queen, King }
+    class Piece
+    {
+        public Player Player { get; internal set; }
+        public PieceType PieceType { get; internal set; }
+        public override string ToString() =>
+            $"{Player} {PieceType}";
+    }
+
+
 **Game Loop**
 
 The goal is to run a loop that cycles these three states continuously, waiting at each step. However, the main Form is always running it's own Message Loop to detect mouse clicks and key presses and it's important not to block that loop with our own.
@@ -98,7 +175,5 @@ This simulates a computer opponent processing an algorithm to determine its next
         richTextBox.SelectionColor = Color.DarkBlue;
         richTextBox.AppendText($"{opponentMove}{Environment.NewLine}");
     }
-
-It might be helpful to look at another answer I wrote that describes how to create the game board with a `TableLayoutPanel` and [how to interact with mouse](https://stackoverflow.com/a/72959973/5438626) to determine the square that's being clicked on.
 
   [1]: https://i.stack.imgur.com/nt8nn.png

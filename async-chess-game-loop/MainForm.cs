@@ -144,24 +144,24 @@ namespace async_chess_game_loop
         }
 
 
-        private void addSquare(int column, int row)
+    private void addSquare(int column, int row)
+    {
+        var color = ((column + row) % 2) == 0 ? Color.White : Color.Black;
+        var square = new Square
         {
-            var color = ((column + row) % 2) == 0 ? Color.White : Color.Black;
-            var square = new Square
-            {
-                BackColor = color,
-                Column = column,
-                Row = row,
-                Size = new Size(80, 80),
-                Margin = new Padding(0),
-                Padding = new Padding(10),
-                Anchor = (AnchorStyles)0xf,
-                SizeMode = PictureBoxSizeMode.StretchImage,
-            };
-            tableLayoutPanel.Controls.Add(square, column, row);
-            // Hook the mouse events here
-            square.Click += onSquareClicked;
-        }
+            BackColor = color,
+            Column = column,
+            Row = row,
+            Size = new Size(80, 80),
+            Margin = new Padding(0),
+            Padding = new Padding(10),
+            Anchor = (AnchorStyles)0xf,
+            SizeMode = PictureBoxSizeMode.StretchImage,
+        };
+        tableLayoutPanel.Controls.Add(square, column, row);
+        // Hook the mouse events here
+        square.Click += onSquareClicked;
+    }
         protected override CreateParams CreateParams
         {
             get
