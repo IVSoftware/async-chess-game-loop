@@ -40,6 +40,10 @@ The goal is to run a loop that cycles these three states continuously, waiting a
             Text = $"Player is {playerColor}";
             _ = playGameAsync(playerColor);
         }
+        .
+        .
+        .
+    }
     
 This method adds a new `Square`.
 
@@ -62,7 +66,7 @@ This method adds a new `Square`.
         square.Click += onSquareClicked;
     }
 
-    A `Square` is derived from `PictureBox` so that images of pieces can be displayed.
+A `Square` is derived from `PictureBox` so that images of pieces can be displayed.
 
     class Square : PictureBox 
     {
