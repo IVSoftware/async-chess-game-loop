@@ -179,5 +179,5 @@ This simulates a computer opponent processing an algorithm to determine its next
         richTextBox.SelectionColor = Color.DarkBlue;
         richTextBox.AppendText($"{opponentMove}{Environment.NewLine}");
     }
-
-  [1]: https://i.stack.imgur.com/nt8nn.png
+    
+  [1]: https://i.stack.imgur.com/drbB4.png
