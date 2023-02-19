@@ -10,7 +10,7 @@ Your post states that you want to **wait for another method to be triggered befo
 ***
 **Game Board**
 
-The goal is to run a loop that cycles these three states continuously, waiting at each step. But before we start a game _loop_ we need a game _board_ so use `TableLayoutPanel` do do that.
+The goal is to run a loop that cycles these three states continuously, waiting at each step. But first we need a game _board_ so use `TableLayoutPanel` do do that.
 
     enum PlayerColor
     {
